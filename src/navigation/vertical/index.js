@@ -28,7 +28,7 @@ const navigation = () => {
     {
       title: 'Employee',
       icon: AccountPlusOutline,
-      path: '/pages/login',
+      path: '/employee',
     },
     {
       title: 'Salary',
@@ -47,7 +47,7 @@ const navigation = () => {
       title: 'Edit Employee',
       icon: Login,
       path: '/employee/edit',
-    }
+    },
   ]
 }
 

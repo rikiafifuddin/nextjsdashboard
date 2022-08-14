@@ -1,4 +1,4 @@
-import db from '../../../../libs/db'
+// import db from '../../../../libs/db'
 
 export default async function handler(req, res) {
   if (req.method !== 'POST')
@@ -60,11 +60,13 @@ export default async function handler(req, res) {
       noteinsurance,
     });
 
+    console.log("add employee data:", req.body);
+
     const createData = await db('employee').where('id', addEmployee).first();
     res.status(200);
     res.json({
       message: 'Add New Employee Successfully',
-      data: createData
+      data: {}
     })
   } catch (err){
     console.log(err)
