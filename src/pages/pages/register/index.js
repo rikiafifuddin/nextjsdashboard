@@ -50,21 +50,21 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
   }
 }))
 
-export async function getServerSideProps(ctx) {
-  const allCookies = cookies(ctx)
-  const status = allCookies.token !== undefined
+// export async function getServerSideProps(ctx) {
+//   const allCookies = cookies(ctx)
+//   const status = allCookies.token !== undefined
 
-  if (!status) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: `/pages/login`
-      }
-    }
-  } else {
-    return { props: {} }
-  }
-}
+//   if (!status) {
+//     return {
+//       redirect: {
+//         permanent: false,
+//         destination: `/pages/login`
+//       }
+//     }
+//   } else {
+//     return { props: {} }
+//   }
+// }
 
 const RegisterPage = () => {
   // ** States
@@ -97,7 +97,7 @@ const RegisterPage = () => {
 
   async function registerHandler(e) {
     e.preventDefault()
-
+    console.log("data: ", fields);
     setStatus('loading')
 
     const registerReq = await fetch('/api/auth/register', {
@@ -119,6 +119,7 @@ const RegisterPage = () => {
   }
 
   function fieldHandler(e) {
+    console.log("fields: ", fields);
     const name = e.target.getAttribute('name')
     setFields({
       ...fields,
