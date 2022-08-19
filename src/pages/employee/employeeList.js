@@ -89,10 +89,10 @@ const TableStickyHeader = (props) => {
                     )
                   })}
 
-                  <TableCell align='center' key={row.id}>
+                  <TableCell align='center' key={row.employeeID}>
                     <IconButton
                       id="viewButton"
-                      onClick={() => Router.push(`/employee/detail/${row.id}`)}
+                      onClick={() => Router.push(`/employee/detail/${row.employeeID}`)}
                       title="Lihat Detail"
                     >
                       <VisibilityIcon />

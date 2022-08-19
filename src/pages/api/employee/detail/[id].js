@@ -6,7 +6,7 @@ export default async function handler(req, res) {
     const { id } = req.query;
 
     try{
-      const detailEmployee = await db('employee').where({ id }).first();
+      const detailEmployee = await db('employee').where({ employeeID : id }).first();
 
       res.status(200);
       res.json({
