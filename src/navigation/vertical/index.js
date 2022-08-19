@@ -33,20 +33,20 @@ const navigation = () => {
     {
       title: 'Salary',
       icon: CreditCardOutline,
-      path: '/cards'
+      path: '/salarymanagement'
     },
     {
       sectionTitle: 'Pages'
     },
     {
-      title: 'Add Employee',
+      title: 'Tambah Gaji Karyawan',
       icon: Login,
-      path: '/employee/add',
+      path: '/salarymanagement/add/addSalary',
     },
     {
-      title: 'Edit Employee',
+      title: 'Edit  Gaji Karyawan',
       icon: Login,
-      path: '/employee/edit',
+      path: '/salarymanagement/edit',
     },
   ]
 }

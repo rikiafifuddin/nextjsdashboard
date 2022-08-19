@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
 
 // ** Demo Components Imports
-import TableStickyHeader from 'src/pages/salarymanagement/salaryList'
+import TableStickyHeader from 'src/pages/employee/EmployeeList'
 
 // export async function getServerSideProps(ctx) {
 

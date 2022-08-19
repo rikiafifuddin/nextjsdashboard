@@ -97,7 +97,6 @@ const RegisterPage = () => {
 
   async function registerHandler(e) {
     e.preventDefault()
-    console.log("data: ", fields);
     setStatus('loading')
 
     const registerReq = await fetch('/api/auth/register', {
@@ -119,7 +118,7 @@ const RegisterPage = () => {
   }
 
   function fieldHandler(e) {
-    console.log("fields: ", fields);
+
     const name = e.target.getAttribute('name')
     setFields({
       ...fields,

@@ -18,28 +18,52 @@ import AccountOutline from 'mdi-material-ui/AccountOutline'
 const salesData = [
   {
     stats: '245k',
-    title: 'Gaji Pokok',
+    title: 'Absensi',
     color: 'primary',
     icon: <TrendingUp sx={{ fontSize: '1.75rem' }} />
   },
   {
     stats: '12.5k',
-    title: 'Insenstif',
+    title: 'Selisih Gaji',
     color: 'success',
     icon: <AccountOutline sx={{ fontSize: '1.75rem' }} />
   },
   {
     stats: '1.54k',
     color: 'warning',
-    title: 'OverTime',
+    title: 'BPJSTK',
     icon: <CellphoneLink sx={{ fontSize: '1.75rem' }} />
   },
   {
     stats: '$88k',
     color: 'info',
-    title: 'Selisih Gaji',
+    title: 'BPJS KES',
     icon: <CurrencyUsd sx={{ fontSize: '1.75rem' }} />
-  }
+  },
+  {
+    stats: '$88k',
+    color: 'info',
+    title: 'PPH21',
+    icon: <CurrencyUsd sx={{ fontSize: '1.75rem' }} />
+  },
+  {
+    stats: '$88k',
+    color: 'info',
+    title: 'Potongan 1',
+    icon: <CurrencyUsd sx={{ fontSize: '1.75rem' }} />
+  },
+  {
+    stats: '$88k',
+    color: 'info',
+    title: 'Potongan 2',
+    icon: <CurrencyUsd sx={{ fontSize: '1.75rem' }} />
+  },
+  {
+    stats: '$88k',
+    color: 'info',
+    title: 'Potongan 3',
+    icon: <CurrencyUsd sx={{ fontSize: '1.75rem' }} />
+  },
 ]
 
 const renderStats = () => {
@@ -68,11 +92,11 @@ const renderStats = () => {
   ))
 }
 
-const StatisticsCard = () => {
+const StatisticsCardPotongan = () => {
   return (
     <Card>
       <CardHeader
-        title='Detail Gaji'
+        title='Potongan Gaji'
         action={
           <IconButton size='small' aria-label='settings' className='card-more-options' sx={{ color: 'text.secondary' }}>
             <DotsVertical />
@@ -102,4 +126,4 @@ const StatisticsCard = () => {
   )
 }
 
-export default StatisticsCard
+export default StatisticsCardPotongan
