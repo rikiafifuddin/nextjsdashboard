@@ -42,10 +42,7 @@ const TabName = styled('span')(({ theme }) => ({
 }))
 
 const AccountSettings = (props) => {
-  console.log("==========props: ", props);
   const data = props.detailEmployee
-
-  console.log("==========data: ", data);
 
   // ** State
   const [value, setValue] = useState('account')

@@ -10,13 +10,27 @@ import FormLayoutsSeparator from 'src/pages/employee/edit/editEmployee'
 // ** Third Party Styles Imports
 import 'react-datepicker/dist/react-datepicker.css'
 
-const FormLayouts = () => {
+export async function getServerSideProps(ctx) {
+
+  const { id } = ctx.query;
+  const postReq = await fetch(process.env.HOST_URL+'/api/employee/detail/'+id);
+
+  const detailEmployee = await postReq.json();
+
+  return {
+      props: {
+        DetailEmployee: detailEmployee.data
+      }
+  }
+}
+
+const FormLayouts = (props) => {
   return (
     <DatePickerWrapper>
       <Grid container spacing={6}>
 
         <Grid item xs={12}>
-          <FormLayoutsSeparator />
+          <FormLayoutsSeparator detailEmployee ={props.DetailEmployee} />
         </Grid>
 
       </Grid>

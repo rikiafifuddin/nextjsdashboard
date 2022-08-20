@@ -1,5 +1,7 @@
 // ** React Imports
 import { forwardRef, useState } from 'react'
+import * as dayjs from 'dayjs'
+import { useRouter } from 'next/router'
 
 // ** MUI Imports
 import Card from '@mui/material/Card'
@@ -35,10 +37,14 @@ const CustomInput2 = forwardRef((props, ref) => {
   return <TextField fullWidth {...props} inputRef={ref} label='Join Date' autoComplete='off' />
 })
 
-const FormLayoutsSeparator = () => {
+const FormLayoutsSeparator = (props) => {
   // ** States
+  const Router = useRouter()
+  dayjs().format()
+  const data = props.detailEmployee
   const [language, setLanguage] = useState([])
-  const [date, setDate] = useState(null)
+  const [status, setStatus] = useState("normal")
+  const [requestStatus, setRequestStatus] = useState(null)
 
   const [values, setValues] = useState({
     password: '',
@@ -78,11 +84,73 @@ const FormLayoutsSeparator = () => {
     setLanguage(event.target.value)
   }
 
+  const [paramHeader, setParamHeader] = useState({
+    id: data?.id,
+    fullName: data?.fullName,
+    email: data?.email,
+    identityID: data?.identityID,
+    employeeID: data?.employeeID,
+    perusahaan: data?.perusahaan,
+    jobSkill: data?.jobSkill,
+    jobType: data?.jobType,
+    joinDate: data?.joinDate,
+    placeofBirth: data?.placeofBirth,
+    birthDate: data?.birthDate,
+    gender: data?.gender,
+    religion: data?.religion,
+    phoneNumber: data?.phoneNumber,
+    noRekening:data?.noRekening,
+    education: data?.education,
+    motherName: data?.motherName,
+    streetAddress: data?.streetAddress,
+    kelurahanAddress: data?.kelurahanAddress,
+    kecamatanAddress: data?.kecamatanAddress,
+    kotaAddress: data?.kotaAddress,
+    dInsurance: data?.dInsurance,
+    bpjsKesehatan: data?.bpjsKesehatan,
+    jkkother: data?.jkkother,
+    noteinsurance: data?.noteinsurance
+  })
+
+  function fieldHandler(e) {
+    const name = e.target.getAttribute('name')
+
+    setParamHeader({
+      ...paramHeader,
+      [name]: e.target.value
+    })
+  }
+
+  async function submitHandler(e) {
+    e.preventDefault()
+    setStatus('loading')
+    console.log("==DATA==", paramHeader);
+
+    const submitReq = await fetch('/api/employee/edit/'+data?.employeeID , {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(paramHeader)
+    })
+
+    if(submitReq.status === 200) {
+      console.log("success Edit employee");
+      setStatus('success')
+      setRequestStatus(true);
+      Router.push('/employee');
+    } else {
+      console.log("failed Edit employee");
+      setStatus('failed')
+      setRequestStatus(false);
+    }
+  }
+
   return (
     <Card>
       <CardHeader title='Edit Employee' titleTypographyProps={{ variant: 'h6' }} />
       <Divider sx={{ margin: 0 }} />
-      <form onSubmit={e => e.preventDefault()}>
+      <form onSubmit= {submitHandler.bind(this)}>
         <CardContent>
           <Grid container spacing={5}>
             <Grid item xs={12}>
@@ -91,36 +159,50 @@ const FormLayoutsSeparator = () => {
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label='Full Name' placeholder='Abby Setyo Wiratama' />
+              <TextField
+              onChange={fieldHandler.bind(this)}
+              fullWidth label='Full Name' name='fullName' defaultValue={data?.fullName} />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth type='email' label='Email' placeholder='abbys@gmail.com' />
+              <TextField
+              onChange={fieldHandler.bind(this)}
+              fullWidth type='email' name='email' label='Email'defaultValue={data?.email} />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label='Identity ID' placeholder='3524150659800001' />
+              <TextField
+              onChange={fieldHandler.bind(this)}
+              fullWidth label='Identity ID' name='identityID' defaultValue={data?.identityID} />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField required fullWidth label='Employee ID' placeholder='2666378615' />
+              <TextField
+              onChange={fieldHandler.bind(this)}
+              required fullWidth label='Employee ID' name='employeeID' defaultValue={data?.employeeID} />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField  fullWidth label='Company' placeholder='Telkom' />
+              <TextField
+              onChange={fieldHandler.bind(this)}
+              fullWidth label='Company' name='perusahaan' defaultValue={data?.perusahaan} />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField  fullWidth label='Job Skill' placeholder='General Manger' />
+              <TextField
+              onChange={fieldHandler.bind(this)}
+              fullWidth label='Job Skill' name='jobSkill' defaultValue={data?.jobSkill} />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField  fullWidth label='Job Type' placeholder='Common' />
+              <TextField
+              onChange={fieldHandler.bind(this)}
+              fullWidth label='Job Type' name='jobType' defaultValue={data?.jobType} />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <DatePicker
-                selected={date}
-                showYearDropdown
-                showMonthDropdown
-                placeholderText='MM-DD-YYYY'
-                customInput={<CustomInput2 />}
-                id='form-joinDate-separator-date'
-                onChange={date => setDate(date)}
-              />
+              <TextField
+                onChange={fieldHandler.bind(this)}
+                name='joinDate'
+                type='date'
+                defaultValue={dayjs(data?.joinDate).format('YYYY-MM-DD')}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                fullWidth label='Tanggal Masuk' />
             </Grid>
             <Grid item xs={12}>
               <Divider sx={{ marginBottom: 0 }} />
@@ -132,60 +214,68 @@ const FormLayoutsSeparator = () => {
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label='Place of Birth' placeholder='Jakarta' />
+              <TextField
+              onChange={fieldHandler.bind(this)}
+              fullWidth name='placeofBirth' label='Place of Birth' defaultValue={data?.placeofBirth} />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <DatePicker
-                selected={date}
-                showYearDropdown
-                showMonthDropdown
-                placeholderText='MM-DD-YYYY'
-                customInput={<CustomInput />}
-                id='form-layouts-separator-date'
-                onChange={date => setDate(date)}
-              />
+              <TextField
+                onChange={fieldHandler.bind(this)}
+                name='birthDate'
+                type='date'
+                defaultValue={dayjs(data?.birthDate).format('YYYY-MM-DD')}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                fullWidth label='Tanggal Masuk' />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <FormControl fullWidth>
-                <InputLabel id='form-layouts-separator-select-label'>Gender</InputLabel>
-                <Select
-                  label='Gender'
-                  defaultValue=''
-                  id='form-layouts-separator-select'
-                  labelId='form-layouts-separator-select-label'
-                >
-                  <MenuItem value='L'>Laki- Laki</MenuItem>
-                  <MenuItem value='P'>Perempuan</MenuItem>
-                  <MenuItem value='O'>Other</MenuItem>
-                </Select>
-              </FormControl>
+              <TextField
+              onChange={fieldHandler.bind(this)}
+              fullWidth name='gender' label='Jenis Kelamin' defaultValue={data?.gender} />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label='Religion' placeholder='Islam' />
+              <TextField fullWidth name='religion' label='Religion'defaultValue={data?.religion} />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label='Phone No.' placeholder='+1-123-456-8790' />
+              <TextField
+              onChange={fieldHandler.bind(this)}
+              fullWidth name='phoneNumber' label='Phone No.' defaultValue={data?.phoneNumber} />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label='Rekening No.' placeholder='1234568790' />
+              <TextField
+              onChange={fieldHandler.bind(this)}
+              fullWidth name='noRekening' label='Rekening No.' defaultValue={data?.noRekening} />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label='Education' placeholder='SMP' />
+              <TextField
+              onChange={fieldHandler.bind(this)}
+              name='education' fullWidth label='Education' defaultValue={data?.education} />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label='Mother Name' placeholder='SMP' />
+              <TextField
+              onChange={fieldHandler.bind(this)}
+              fullWidth name='motherName' label='Nama IBU' defaultValue={data?.motherName} />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label='Street Address' placeholder='Jl. Dalam Belakang' />
+              <TextField
+              onChange={fieldHandler.bind(this)}
+              fullWidth name='streetAddress' label='Alamat KTP' defaultValue={data?.streetAddress} />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label='Kelurahan Address' placeholder='Payaman' />
+              <TextField
+              onChange={fieldHandler.bind(this)}
+              fullWidth name='kelurahanAddress' label='Kelurahan KTP' defaultValue={data?.kelurahanAddress} />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label='Kota Address' placeholder='Lamongan' />
+              <TextField
+              onChange={fieldHandler.bind(this)}
+              fullWidth name='kecamatanAddress' label='Kecamatan KTP' defaultValue={data?.kecamatanAddress} />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label='Kota Address' placeholder='Lamongan' />
+              <TextField
+              onChange={fieldHandler.bind(this)}
+              fullWidth name='kotaAddress' label='Kota KTP' defaultValue={data?.kotaAddress} />
             </Grid>
             <Grid item xs={12}>
               <Divider sx={{ marginBottom: 0 }} />
@@ -197,16 +287,24 @@ const FormLayoutsSeparator = () => {
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label='D Asuransi' placeholder='072201740' />
+              <TextField
+              onChange={fieldHandler.bind(this)}
+              fullWidth name='dInsurance' label='D Asuransi' defaultValue={data?.dInsurance} />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label='BPJS Kesehatan' placeholder='0000452600144' />
+              <TextField
+              onChange={fieldHandler.bind(this)}
+              fullWidth name='bpjsKesehatan' label='BPJS Kesehatan' defaultValue={data?.bpjsKesehatan} />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label='JKK JKM Other' placeholder='-' />
+              <TextField
+              onChange={fieldHandler.bind(this)}
+              fullWidth name='jkkother' label='JKK JKM Other' defaultValue={data?.jkkother} />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label='Keterangan Asuransi' placeholder='PBI (APBN) / OK Edabu 05-07-2022' />
+              <TextField
+              onChange={fieldHandler.bind(this)}
+              fullWidth name='noteinsurance' label='Keterangan Asuransi' defaultValue={data?.noteinsurance} />
             </Grid>
 
           </Grid>
@@ -214,10 +312,10 @@ const FormLayoutsSeparator = () => {
         <Divider sx={{ margin: 0 }} />
         <CardActions>
           <Button size='large' type='submit' sx={{ mr: 2 }} variant='contained'>
-            Submit
+            Simpan
           </Button>
-          <Button size='large' color='secondary' variant='outlined'>
-            Cancel
+          <Button size='large' color='secondary' variant='outlined' onClick={()=> Router.push('/employee')}>
+            Batal
           </Button>
         </CardActions>
       </form>
