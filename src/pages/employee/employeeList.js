@@ -59,6 +59,24 @@ const TableStickyHeader = (props) => {
     setPage(0)
   }
 
+  async function deleteHandler(employeeID, e) {
+    e.preventDefault();
+
+    const ask = confirm('Apakah data ini akan dihapus?');
+
+    if(ask) {
+      const deletePost = await fetch('/api/employee/delete/' + employeeID, {
+          method: 'DELETE'
+      });
+
+      const res = await deletePost.json();
+
+      if( res ) {
+        Router.reload(window.location.pathname);
+      }
+    }
+  }
+
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <TableContainer>
@@ -106,7 +124,7 @@ const TableStickyHeader = (props) => {
                     </IconButton>
                     <IconButton
                       id="deleteButton"
-                      onClick={() => Router.push('#')}
+                      onClick={deleteHandler.bind(this, row.employeeID)}
                       title="Delete"
                     >
                       <DeleteIcon/>
