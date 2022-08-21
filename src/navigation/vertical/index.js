@@ -18,11 +18,6 @@ const navigation = () => {
       path: '/'
     },
     {
-      title: 'Account Settings',
-      icon: AccountCogOutline,
-      path: '/account-settings'
-    },
-    {
       sectionTitle: 'Admin'
     },
     {
@@ -36,17 +31,7 @@ const navigation = () => {
       path: '/salarymanagement'
     },
     {
-      sectionTitle: 'Pages'
-    },
-    {
-      title: 'Tambah Gaji Karyawan',
-      icon: Login,
-      path: '/salarymanagement/add/addSalary',
-    },
-    {
-      title: 'Edit  Gaji Karyawan',
-      icon: Login,
-      path: '/salarymanagement/edit',
+      sectionTitle: '-'
     },
   ]
 }

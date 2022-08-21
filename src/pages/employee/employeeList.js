@@ -118,7 +118,7 @@ const TableStickyHeader = (props) => {
                     <IconButton
                       id="editButton"
                       onClick={() => Router.push(`/employee/edit/${row.employeeID}`)}
-                      title={`Edit ${row.employeeID}`}
+                      title="Edit"
                     >
                       <EditIcon />
                     </IconButton>
@@ -129,7 +129,7 @@ const TableStickyHeader = (props) => {
                     >
                       <DeleteIcon/>
                     </IconButton>
-                    </TableCell>
+                  </TableCell>
 
                 </TableRow>
               )

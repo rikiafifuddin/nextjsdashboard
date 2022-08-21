@@ -1,5 +1,7 @@
 // ** React Imports
 import { useState } from 'react'
+import * as dayjs from 'dayjs'
+import { useRouter } from 'next/router'
 
 // ** MUI Imports
 import Paper from '@mui/material/Paper'
@@ -12,35 +14,42 @@ import TableContainer from '@mui/material/TableContainer'
 import TablePagination from '@mui/material/TablePagination'
 
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
 
 const columns = [
   { id: 'fullName', label: 'Nama', minWidth: "25%" },
   { id: 'employeeID', label: 'Kode Pegawai', minWidth: "15%" },
-  {id: 'perusahaan', label: 'Perusahaan', minWidth: "15%", align: 'right'},
-  {id: 'salaryDate', label: 'Tanggal Gaji', minWidth: "15%", align: 'right'},
-  {id: 'sumSalary', label: 'Total Gaji', minWidth: "20%", align: 'right'}
+  {id: 'perusahaan', label: 'Perusahaan', minWidth: "15%", align: 'center'},
+  {id: 'salaryDate', label: 'Tanggal Gaji', minWidth: "15%", align: 'center'},
+  {id: 'sumSalary', label: 'Total Gaji', minWidth: "20%", align: 'left'}
 ]
 
 
 const TableStickyHeader = (props) => {
   // ** States
+  dayjs().format()
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(25)
+  const Router = useRouter()
 
   const {
-    ListEmployee
+    ListSalary
   } = props
 
-  const data = ListEmployee || [] ;
+  const data = ListSalary || [] ;
   const rows = [];
 
   data.forEach(e => {
+    const dateFormat = dayjs(e.salaryDate).format('DD-MMM-YYYY')
     rows.push({
+      id: e.id,
       fullName: e.fullName,
       employeeID: e.employeeID,
-      jobSkill: e.jobSkill,
-      jobType: e.jobType,
-      perusahaan: e.perusahaan
+      perusahaan: e.perusahaan,
+      salaryDate: dateFormat,
+      sumSalary: e.sumSalary
     })
   });
 
@@ -53,6 +62,24 @@ const TableStickyHeader = (props) => {
   const handleChangeRowsPerPage = event => {
     setRowsPerPage(+event.target.value)
     setPage(0)
+  }
+
+  async function deleteHandler(id, e) {
+    e.preventDefault();
+
+    const ask = confirm('Apakah data ini akan dihapus?');
+
+    if(ask) {
+      const deletePost = await fetch('/api/salarymanagement/delete/' + id, {
+          method: 'DELETE'
+      });
+
+      const res = await deletePost.json();
+
+      if( res ) {
+        Router.reload(window.location.pathname);
+      }
+    }
   }
 
   return (
@@ -84,9 +111,24 @@ const TableStickyHeader = (props) => {
                       </TableCell>
                     )
                   })}
-                  <TableCell key={rows.employeeID}>
-                    <VisibilityIcon/>
+
+                 <TableCell align='center' key={row.id}>
+                    <IconButton
+                      id="editButton"
+                      onClick={() => Router.push(`/salarymanagement/edit/${row.id}`)}
+                      title="Edit"
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      id="deleteButton"
+                      onClick={deleteHandler.bind(this, row.id)}
+                      title="Delete"
+                    >
+                      <DeleteIcon/>
+                    </IconButton>
                   </TableCell>
+
                 </TableRow>
               )
             })}

@@ -54,21 +54,21 @@ const FormLayoutsSeparator = () => {
   const [paramHeader, setParamHeader] = useState({
     employeeID: '',
     status: '',
-    insentif: '',
-    baseSalary: '',
-    OT: '',
-    OTBKOorLP: '',
-    LPBL: '',
-    salaryDifferencePlus: '',
-    OTLalu: '',
-    absensi: '',
-    salaryDifferenceMin: '',
-    BPJSTK: '',
-    BPJSKES: '',
-    PPH21:'',
-    other1: '',
-    other2: '',
-    other3: '',
+    insentif: 0,
+    baseSalary: 0,
+    OT: 0,
+    OTBKOorLP: 0,
+    LPBL: 0,
+    salaryDifferencePlus: 0,
+    OTLalu: 0,
+    absensi: 0,
+    salaryDifferenceMin: 0,
+    BPJSTK: 0,
+    BPJSKES: 0,
+    PPH21:0,
+    other1: 0,
+    other2: 0,
+    other3: 0,
     keteranganPotongan: '',
     salaryDate: ''
   })
@@ -126,7 +126,7 @@ const FormLayoutsSeparator = () => {
 
     setStatus('loading')
 
-    const submitReq = await fetch('/api/employee/addEmployee', {
+    const submitReq = await fetch('/api/salarymanagement/addsalary', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -135,11 +135,13 @@ const FormLayoutsSeparator = () => {
     })
 
     if(submitReq.status === 200) {
-      console.log("success add employee");
+      console.log("success add salary");
+      setStatus('success')
       setRequestStatus(true);
-      Router.push('/employee');
+      Router.push('/salarymanagement');
     } else {
-      console.log("failed add employee");
+      console.log("failed add salary");
+      setStatus('failed')
       setRequestStatus(false);
     }
 
@@ -156,6 +158,7 @@ const FormLayoutsSeparator = () => {
           <Grid container spacing={5}>
             <Grid item xs={12} sm={6}>
               <TextField
+              required
               onChange={fieldHandler.bind(this)}
               name='employeeID'
               fullWidth label='No ID Karyawan' placeholder='2233311112' />
@@ -170,7 +173,7 @@ const FormLayoutsSeparator = () => {
               <TextField
               onChange={fieldHandler.bind(this)}
               name='insentif'
-              fullWidth label='Insentif' placeholder='100.000' />
+              fullWidth label='insentif' placeholder='100.000' />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -275,8 +278,6 @@ const FormLayoutsSeparator = () => {
               name='keteranganPotongan'
               fullWidth label='Keterangan Potongan' placeholder='Potongan 1 Baju Kerja' />
             </Grid>
-
-
           </Grid>
         </CardContent>
         <Divider sx={{ margin: 0 }} />
@@ -284,7 +285,7 @@ const FormLayoutsSeparator = () => {
           <Button size='large' type='submit' sx={{ mr: 2 }} variant='contained'>
             Submit
           </Button>
-          <Button size='large' color='secondary' variant='outlined' onClick={()=> Router.push('/employee')}>
+          <Button size='large' color='secondary' variant='outlined' onClick={()=> Router.push('/salarymanagement')}>
             Cancel
           </Button>
         </CardActions>

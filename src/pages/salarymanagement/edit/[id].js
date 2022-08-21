@@ -1,6 +1,7 @@
 // ** React Imports
-import { forwardRef, useState } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/router'
+import * as dayjs from 'dayjs'
 
 // ** MUI Imports
 import Card from '@mui/material/Card'
@@ -27,15 +28,21 @@ import DatePicker from 'react-datepicker'
 import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 
-const CustomInput = forwardRef((props, ref) => {
-  return <TextField name='birthDate' fullWidth {...props} inputRef={ref} label='Tanggal lahir' autoComplete='off' />
-})
+export async function getServerSideProps(ctx) {
 
-const CustomInput2 = forwardRef((props, ref) => {
-  return <TextField name='joinDate' fullWidth {...props} inputRef={ref} label='Tanggal Masuk' autoComplete='off' />
-})
+  const { id } = ctx.query;
+  const postReq = await fetch(process.env.HOST_URL+'/api/salarymanagement/detail/'+id);
 
-const FormLayoutsSeparator = () => {
+  const detailSalary = await postReq.json();
+
+  return {
+      props: {
+        DetailSalary: detailSalary.data
+      }
+  }
+}
+
+const FormLayoutsSeparator = (props) => {
   // ** States
   const [language, setLanguage] = useState([])
   const [date, setDate] = useState(null)
@@ -43,34 +50,30 @@ const FormLayoutsSeparator = () => {
   const [status, setStatus] = useState("normal")
   const [requestStatus, setRequestStatus] = useState(null)
   const Router = useRouter()
+  dayjs().format()
 
-  // const [values, setValues] = useState({
-  //   password: '',
-  //   password2: '',
-  //   showPassword: false,
-  //   showPassword2: false
-  // })
+  const data = props.DetailSalary
 
   const [paramHeader, setParamHeader] = useState({
-    employeeID: '',
-    status: '',
-    insentif: '',
-    baseSalary: '',
-    OT: '',
-    OTBKOorLP: '',
-    LPBL: '',
-    salaryDifferencePlus: '',
-    OTLalu: '',
-    absensi: '',
-    salaryDifferenceMin: '',
-    BPJSTK: '',
-    BPJSKES: '',
-    PPH21:'',
-    other1: '',
-    other2: '',
-    other3: '',
-    keteranganPotongan: '',
-    salaryDate: ''
+    employeeID: data?.employeeID,
+    status: data?.status,
+    insentif: data?.insentif,
+    baseSalary: data?.baseSalary,
+    OT: data?.OT,
+    OTBKOorLP: data?.OTBKOorLP,
+    LPBL: data?.LPBL,
+    salaryDifferencePlus: data?.salaryDifferencePlus,
+    OTLalu: data?.OTLalu,
+    absensi: data?.absensi,
+    salaryDifferenceMin: data?.salaryDifferenceMin,
+    BPJSTK: data?.BPJSTK,
+    BPJSKES: data?.BPJSKES,
+    PPH21:data?.PPH21,
+    other1: data?.other1,
+    other2: data?.other2,
+    other3: data?.other3,
+    keteranganPotongan: data?.keteranganPotongan,
+    salaryDate: data?.salaryDate
   })
 
   // Handle Password
@@ -126,8 +129,8 @@ const FormLayoutsSeparator = () => {
 
     setStatus('loading')
 
-    const submitReq = await fetch('/api/employee/addEmployee', {
-      method: 'POST',
+    const submitReq = await fetch('/api/salarymanagement/edit/'+data.id, {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
@@ -135,11 +138,11 @@ const FormLayoutsSeparator = () => {
     })
 
     if(submitReq.status === 200) {
-      console.log("success add employee");
+      console.log("success Edit Salary");
       setRequestStatus(true);
-      Router.push('/employee');
+      Router.push('/salarymanagement');
     } else {
-      console.log("failed add employee");
+      console.log("failed Edit Salary");
       setRequestStatus(false);
     }
 
@@ -156,116 +159,117 @@ const FormLayoutsSeparator = () => {
           <Grid container spacing={5}>
             <Grid item xs={12} sm={6}>
               <TextField
+              disabled
               onChange={fieldHandler.bind(this)}
               name='employeeID'
-              fullWidth label='No ID Karyawan' placeholder='2233311112' />
+              fullWidth label='No ID Karyawan' defaultValue={data?.employeeID} />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
               onChange={fieldHandler.bind(this)}
               name='status'
-              fullWidth label='Status' placeholder='Administrasi' />
+              fullWidth label='Status' defaultValue={data?.status} />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
               onChange={fieldHandler.bind(this)}
               name='insentif'
-              fullWidth label='Insentif' placeholder='100.000' />
+              fullWidth label='Insentif' defaultValue={data?.insentif} />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
               onChange={fieldHandler.bind(this)}
               name='baseSalary'
-              required fullWidth label='Gaji Pokok' placeholder='5.000.000' />
+              required fullWidth label='Gaji Pokok' defaultValue={data?.baseSalary} />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
               onChange={fieldHandler.bind(this)}
               name='OT'
-              fullWidth label='OT' placeholder='350.000' />
+              fullWidth label='OT' defaultValue={data?.OT} />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
               onChange={fieldHandler.bind(this)}
               name='OTBKOorLP'
-              fullWidth label='OT BKO / LP' placeholder='10.000' />
+              fullWidth label='OT BKO / LP' defaultValue={data?.OTBKOorLP} />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
               onChange={fieldHandler.bind(this)}
               name='LPBL'
-              fullWidth label='LP BL' placeholder='20.000' />
+              fullWidth label='LP BL' defaultValue={data?.LPBL} />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
               onChange={fieldHandler.bind(this)}
               name='salaryDifferencePlus'
-              fullWidth label='Selisih Gaji +' placeholder='200.000' />
+              fullWidth label='Selisih Gaji +' defaultValue={data?.salaryDifferencePlus} />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
               onChange={fieldHandler.bind(this)}
               name='OTLalu'
-              fullWidth label='OT Lalu' placeholder='10.000' />
+              fullWidth label='OT Lalu' defaultValue={data?.OTLalu} />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
               onChange={fieldHandler.bind(this)}
               name='absensi'
-              fullWidth label='Absensi' placeholder='10.000' />
+              fullWidth label='Absensi' defaultValue={data?.absensi}/>
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
               onChange={fieldHandler.bind(this)}
               name='salaryDifferenceMin'
-              fullWidth label='Selisih Gaji -' placeholder='10.000' />
+              fullWidth label='Selisih Gaji -' defaultValue={data?.salaryDifferenceMin} />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
               onChange={fieldHandler.bind(this)}
               name='BPJSTK'
-              fullWidth label='BPJS Tenaga Kerja' placeholder='20.000' />
+              fullWidth label='BPJS Tenaga Kerja' defaultValue={data?.BPJSTK} />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
               onChange={fieldHandler.bind(this)}
               name='BPJSKES'
-              fullWidth label='BPJS Kesehatan' placeholder='10.000' />
+              fullWidth label='BPJS Kesehatan' defaultValue={data?.BPJSKES} />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
               onChange={fieldHandler.bind(this)}
               name='PPH21'
-              fullWidth label='PPH21' placeholder='20.000' />
+              fullWidth label='PPH21' defaultValue={data?.PPH21} />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
               onChange={fieldHandler.bind(this)}
               name='other1'
-              fullWidth label='Potongan Lain Lain 1' placeholder='20.000' />
+              fullWidth label='Potongan Lain Lain 1' defaultValue={data?.other1} />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
               onChange={fieldHandler.bind(this)}
               name='other2'
-              fullWidth label='Potongan Lain Lain 2' placeholder='34.000' />
+              fullWidth label='Potongan Lain Lain 2' defaultValue={data?.other2} />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
               onChange={fieldHandler.bind(this)}
               name='other3'
-              fullWidth label='Potongan Lain Lain 3' placeholder='34.000' />
+              fullWidth label='Potongan Lain Lain 3' defaultValue={data?.other3} />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
                 onChange={fieldHandler.bind(this)}
                 name='salaryDate'
                 type='date'
-                defaultValue=""
+                defaultValue={dayjs(data?.salaryDate).format('YYYY-MM-DD')}
                 InputLabelProps={{
                   shrink: true,
                 }}
-                fullWidth label='Tanggal Gaji' placeholder='Common' />
+                fullWidth label='Tanggal Gaji' />
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -273,7 +277,7 @@ const FormLayoutsSeparator = () => {
               rows={4}
               onChange={fieldHandler.bind(this)}
               name='keteranganPotongan'
-              fullWidth label='Keterangan Potongan' placeholder='Potongan 1 Baju Kerja' />
+              fullWidth label='Keterangan Potongan' defaultValue={data?.keteranganPotongan} />
             </Grid>
 
 
@@ -284,7 +288,7 @@ const FormLayoutsSeparator = () => {
           <Button size='large' type='submit' sx={{ mr: 2 }} variant='contained'>
             Submit
           </Button>
-          <Button size='large' color='secondary' variant='outlined' onClick={()=> Router.push('/employee')}>
+          <Button size='large' color='secondary' variant='outlined' onClick={()=> Router.push('/salarymanagement')}>
             Cancel
           </Button>
         </CardActions>
