@@ -43,13 +43,16 @@ const TableStickyHeader = (props) => {
 
   data.forEach(e => {
     const dateFormat = dayjs(e.salaryDate).format('DD-MMM-YYYY')
+    const salaryData = Number(e.sumSalary).toFixed(2);
+    const salaryFormat = `Rp ${new Intl.NumberFormat('id-ID').format(Number(salaryData))}`;
+
     rows.push({
       id: e.id,
       fullName: e.fullName,
       employeeID: e.employeeID,
       perusahaan: e.perusahaan,
       salaryDate: dateFormat,
-      sumSalary: e.sumSalary
+      sumSalary: salaryFormat
     })
   });
 
