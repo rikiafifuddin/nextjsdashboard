@@ -211,7 +211,6 @@ const FormLayoutsSeparator = () => {
                 onChange={fieldHandler.bind(this)}
                 name='joinDate'
                 type='date'
-                defaultValue="2017-05-24"
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -237,7 +236,6 @@ const FormLayoutsSeparator = () => {
                 onChange={fieldHandler.bind(this)}
                 name='birthDate'
                 type='date'
-                defaultValue="2017-05-24"
                 InputLabelProps={{
                   shrink: true,
                 }}

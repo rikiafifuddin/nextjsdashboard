@@ -14,7 +14,7 @@ import { Button } from '@mui/material'
 
 export async function getServerSideProps(ctx) {
 
-  const postReq = await fetch('http://localhost:3000/api/employee/getAllEmployee');
+  const postReq = await fetch(process.env.HOST_URL+'/api/employee/getAllEmployee');
   const ListEmployee = await postReq.json();
 
   return {
@@ -26,7 +26,6 @@ export async function getServerSideProps(ctx) {
 
 const MUITable = (props) => {
   const Router = useRouter()
-  console.log("props:", props);
 
   return (
     <Grid container spacing={6}>

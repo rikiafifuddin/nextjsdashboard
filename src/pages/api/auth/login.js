@@ -5,9 +5,9 @@ import jwt from 'jsonwebtoken'
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end()
 
-  const { email, password } = req.body
+  const { employeeID, password } = req.body
 
-  const checkUser = await db('users').where({ email }).first()
+  const checkUser = await db('users').where({ employeeID }).first()
 
   if (!checkUser) return res.status(401).end()
 
@@ -18,11 +18,11 @@ export default async function handler(req, res) {
   const token = jwt.sign(
     {
       id: checkUser.id,
-      email: checkUser.email
+      employeeID: checkUser.employeeID
     },
     process.env.JWT_SECRET,
     {
-      expiresIn: '7d'
+      expiresIn: '1d'
     }
   )
 

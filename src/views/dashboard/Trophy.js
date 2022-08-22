@@ -22,30 +22,30 @@ const TrophyImg = styled('img')({
   position: 'absolute'
 })
 
-const Trophy = () => {
+const Trophy = (props) => {
   // ** Hook
   const theme = useTheme()
   const imageSrc = theme.palette.mode === 'light' ? 'triangle-light.png' : 'triangle-dark.png'
+  const data = props.data
+
+  const salaryData = Number(data?.sumSalary).toFixed(2);
+  const salaryFormat = `Rp ${new Intl.NumberFormat('id-ID').format(Number(salaryData))}`;
 
   return (
     <Card sx={{ position: 'relative' }}>
       <CardContent>
-        <Typography variant='h6'>Abby Setyo Wiratama 🥳</Typography>
+        <Typography variant='h6'>{data?.fullName}</Typography>
         <Typography variant='body2' sx={{ letterSpacing: '0.25px' }}>
           Total gaji
         </Typography>
         <Typography variant='h5' sx={{ my: 4, color: 'primary.main' }}>
-          5.600.000
+          {salaryFormat}
         </Typography>
         <Stack spacing={2} direction="row">
           <Button size='small' variant='contained'>
             Download
           </Button>
-          <Button size='small' variant='contained'>
-            Email
-          </Button>
         </Stack>
-
         <TriangleImg alt='triangle background' src={`/images/misc/${imageSrc}`} />
         <TrophyImg alt='trophy' src='/images/misc/trophy.png' />
       </CardContent>

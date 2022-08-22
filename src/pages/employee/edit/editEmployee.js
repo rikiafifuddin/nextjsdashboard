@@ -124,7 +124,6 @@ const FormLayoutsSeparator = (props) => {
   async function submitHandler(e) {
     e.preventDefault()
     setStatus('loading')
-    console.log("==DATA==", paramHeader);
 
     const submitReq = await fetch('/api/employee/edit/'+data?.employeeID , {
       method: 'PUT',

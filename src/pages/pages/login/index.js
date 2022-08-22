@@ -92,7 +92,7 @@ const LoginPage = () => {
   })
 
   const [fields, setFields] = useState({
-    email: '',
+    employeeID: '',
     password: ''
   })
 
@@ -176,11 +176,11 @@ const LoginPage = () => {
           <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
             <TextField
               onChange={fieldHandler.bind(this)}
-              name='email'
+              name='employeeID'
               autoFocus
               fullWidth
-              id='email'
-              label='Email'
+              id='employeeID'
+              label='Kode Pegawai'
               sx={{ marginBottom: 4 }}
             />
             <FormControl fullWidth>

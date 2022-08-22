@@ -61,7 +61,6 @@ const TabAccount = (props) => {
   }
 
   const data = props.detailEmployee
-  console.log("data",props);
   dayjs().format()
 
   return (

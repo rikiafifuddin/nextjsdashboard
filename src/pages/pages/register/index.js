@@ -74,7 +74,7 @@ const RegisterPage = () => {
   })
 
   const [fields, setFields] = useState({
-    email: '',
+    employeeID: '',
     password: ''
   })
 
@@ -156,9 +156,8 @@ const RegisterPage = () => {
             <TextField
               onChange={fieldHandler.bind(this)}
               fullWidth
-              name='email'
-              type='email'
-              label='Email'
+              name='employeeID'
+              label='Kode Pegawai'
               sx={{ marginBottom: 4 }}
             />
             <FormControl fullWidth>

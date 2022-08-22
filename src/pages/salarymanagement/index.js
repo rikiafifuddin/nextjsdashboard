@@ -13,7 +13,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 
 export async function getServerSideProps(ctx) {
 
-  const postReq = await fetch('http://localhost:3000/api/salarymanagement/getAllSalary');
+  const postReq = await fetch(process.env.HOST_URL+'/api/salarymanagement/getAllSalary');
   const ListSalary = await postReq.json();
 
   return {
@@ -24,7 +24,7 @@ export async function getServerSideProps(ctx) {
 }
 
 const MUITable = (props) => {
-  // console.log("props:", props);
+
   const Router = useRouter()
 
   return (

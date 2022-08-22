@@ -56,8 +56,6 @@ const TableStickyHeader = (props) => {
     })
   });
 
-  console.log("data: ", rows);
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage)
   }
