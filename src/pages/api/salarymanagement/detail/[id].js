@@ -11,8 +11,6 @@ export default async function handler(req, res) {
 
       const detailEmployee = await db('employee').where({employeeID: id}).first()
 
-      salaryJoin.fullName = detailEmployee.fullName;
-
       // const salaryJoin = await db('salary')
       // .join('employee', 'salary.employeeID', '=', id)
       // .select('employee.fullName',
@@ -46,6 +44,13 @@ export default async function handler(req, res) {
       salaryJoin.sumSalaryPlus = sumSalaryPlus;
       salaryJoin.sumSalaryMin = sumSalaryMin;
       salaryJoin.sumSalary = sumSalary;
+
+      salaryJoin.fullName = detailEmployee?.fullName;
+      salaryJoin.perusahaan = detailEmployee?.perusahaan;
+      salaryJoin.jobSkill = detailEmployee?.jobSkill;
+      salaryJoin.bpjsKesehatan = detailEmployee?.bpjsKesehatan;
+      salaryJoin.bpjsTK = detailEmployee?.bpjsTK;
+      salaryJoin.noRekening = detailEmployee?.noRekening;
 
       res.status(200);
       res.json({

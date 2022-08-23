@@ -5,6 +5,10 @@ import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
 import { styled, useTheme } from '@mui/material/styles'
 import Stack from '@mui/material/Stack';
+import * as dayjs from 'dayjs'
+import { formatNumberToRupiah, formatHiddenAccountNumber } from '../../../helper/transform';
+
+dayjs().format()
 
 // Styled component for the triangle shaped background image
 const TriangleImg = styled('img')({
@@ -27,9 +31,101 @@ const Trophy = (props) => {
   const theme = useTheme()
   const imageSrc = theme.palette.mode === 'light' ? 'triangle-light.png' : 'triangle-dark.png'
   const data = props.data
+  const formatDate = dayjs(data?.salaryDate).format('MMM-YYYY')
+
+  function formatCurrency(cents) {
+    return "$" + (cents / 100).toFixed(2);
+  }
+
+  const generateInvoice = (props, e) => {
+    e.preventDefault();
+    const paramData = props.data
+    const formatDatesalary = dayjs(paramData?.salaryDate).format('MMM-YYYY')
+
+    // send a post request with the name to our API endpoint
+    const fetchData = async () => {
+      const dataPDF = await fetch('/api/generate-invoice', {
+        method: 'POST',
+        body: JSON.stringify({
+          id: paramData?.id,
+          employeeID: paramData?.employeeID,
+          status: paramData?.status,
+          insentif: formatNumberToRupiah(paramData?.insentif),
+          baseSalary: formatNumberToRupiah(paramData?.baseSalary),
+          OT: formatNumberToRupiah(paramData?.OT),
+          OTBKOorLP: formatNumberToRupiah(paramData?.OTBKOorLP),
+          LPBL: formatNumberToRupiah(paramData?.LPBL),
+          salaryDifferencePlus: formatNumberToRupiah(paramData?.salaryDifferencePlus),
+          OTLalu: formatNumberToRupiah(paramData?.OTLalu),
+          absensi: formatNumberToRupiah(paramData?.absensi),
+          salaryDifferenceMin: formatNumberToRupiah(paramData?.salaryDifferenceMin),
+          BPJSTK: formatNumberToRupiah(paramData?.BPJSTK),
+          BPJSKES: formatNumberToRupiah(paramData?.BPJSKES),
+          PPH21: formatNumberToRupiah(paramData?.PPH21),
+          other1: formatNumberToRupiah(paramData?.other1),
+          other2: formatNumberToRupiah(paramData?.other2),
+          other3: formatNumberToRupiah(paramData?.other3),
+          keteranganPotongan: paramData?.keteranganPotongan,
+          salaryDate: formatDatesalary,
+          fullName: paramData?.fullName,
+          sumSalaryPlus: formatNumberToRupiah(paramData?.sumSalaryPlus),
+          sumSalaryMin: formatNumberToRupiah(paramData?.sumSalaryMin),
+          sumSalary: formatNumberToRupiah(paramData?.sumSalary),
+          perusahaan: paramData?.perusahaan,
+          jobSkill: paramData?.jobSkill,
+          bpjsKesehatan: paramData?.bpjsKesehatan,
+          bpjsTK: paramData?.bpjsTK,
+          noRekening: formatHiddenAccountNumber(paramData?.noRekening)
+        }),
+      });
+
+      // convert the response into an array Buffer
+      return dataPDF.arrayBuffer();
+    };
+
+    // convert the buffer into an object URL
+    const saveAsPDF = async () => {
+      const buffer = await fetchData();
+      const blob = new Blob([buffer]);
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `Slip Gaji ${data?.fullName + " " +formatDate}.pdf`;
+      link.click();
+    };
+
+    saveAsPDF();
+  };
 
   const salaryData = Number(data?.sumSalary).toFixed(2);
   const salaryFormat = `Rp ${new Intl.NumberFormat('id-ID').format(Number(salaryData))}`;
+
+  const invoice = {
+    shipping: {
+      name: "John Doe",
+      address: "1234 Main Street",
+      city: "San Francisco",
+      state: "CA",
+      country: "US",
+      postal_code: 94111
+    },
+    items: [
+      {
+        item: "TC 100",
+        description: "Toner Cartridge",
+        quantity: 2,
+        amount: 6000
+      },
+      {
+        item: "USB_EXT",
+        description: "USB Cable Extender",
+        quantity: 1,
+        amount: 2000
+      }
+    ],
+    subtotal: 8000,
+    paid: 0,
+    invoice_nr: 1234
+  };
 
   return (
     <Card sx={{ position: 'relative' }}>
@@ -42,7 +138,7 @@ const Trophy = (props) => {
           {salaryFormat}
         </Typography>
         <Stack spacing={2} direction="row">
-          <Button size='small' variant='contained'>
+          <Button onClick={generateInvoice.bind(this, props)} size='small' variant='contained'>
             Download
           </Button>
         </Stack>
