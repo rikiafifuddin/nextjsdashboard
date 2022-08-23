@@ -15,10 +15,13 @@ export default async function handler(req, res) {
 
   if (!checkPassword) return res.status(401).end()
 
+  console.log("checkuser", checkUser)
+
   const token = jwt.sign(
     {
       id: checkUser.id,
-      employeeID: checkUser.employeeID
+      employeeID: checkUser.employeeID,
+      role: checkUser.role
     },
     process.env.JWT_SECRET,
     {
@@ -26,9 +29,14 @@ export default async function handler(req, res) {
     }
   )
 
+  const roles = checkUser.role
+  const employeeIDs = checkUser.employeeID
+
   res.status(200)
   res.json({
     message: 'Login successfully',
-    token
+    token,
+    roles,
+    employeeIDs,
   })
 }

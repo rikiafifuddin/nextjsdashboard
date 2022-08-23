@@ -9,31 +9,45 @@ import CreditCardOutline from 'mdi-material-ui/CreditCardOutline'
 import AccountPlusOutline from 'mdi-material-ui/AccountPlusOutline'
 import AlertCircleOutline from 'mdi-material-ui/AlertCircleOutline'
 import GoogleCirclesExtended from 'mdi-material-ui/GoogleCirclesExtended'
+import Cookie from 'js-cookie'
 
 const navigation = () => {
-  return [
-    {
-      title: 'Dashboard',
-      icon: HomeOutline,
-      path: '/'
-    },
-    {
-      sectionTitle: 'Admin'
-    },
-    {
-      title: 'Employee',
-      icon: AccountPlusOutline,
-      path: '/employee',
-    },
-    {
-      title: 'Salary',
-      icon: CreditCardOutline,
-      path: '/salarymanagement'
-    },
-    {
-      sectionTitle: '-'
-    },
-  ]
+  const cookieRole = Cookie.get('role')
+
+  if (cookieRole == 'user'){
+    return [
+      {
+        title: 'Dashboard',
+        icon: HomeOutline,
+        path: '/'
+      }
+    ]
+  } else if (cookieRole == 'B46pvhd1ME1Tqxo'){
+    return [
+      {
+        title: 'Dashboard',
+        icon: HomeOutline,
+        path: '/'
+      },
+      {
+        sectionTitle: 'Admin'
+      },
+      {
+        title: 'Employee',
+        icon: AccountPlusOutline,
+        path: '/employee',
+      },
+      {
+        title: 'Salary',
+        icon: CreditCardOutline,
+        path: '/salarymanagement'
+      },
+      {
+        sectionTitle: '-'
+      },
+    ]
+  }
+
 }
 
 export default navigation

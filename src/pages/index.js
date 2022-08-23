@@ -27,18 +27,22 @@ export async function getServerSideProps(ctx) {
   } else {
     const token = allCookies.token
     let datacookies
+    let dataUser
 
     jwt.verify(token, process.env.JWT_SECRET, function(err, decoded) {
       if(err) return {};
       datacookies = decoded
     });
 
+    dataUser = datacookies
+
     const postReq = await fetch(process.env.HOST_URL+'/api/salarymanagement/detail/'+ datacookies?.employeeID);
     const detailEmployeeSalary = await postReq.json();
 
     return {
       props:{
-        datacookies: detailEmployeeSalary.data
+        datacookies: detailEmployeeSalary.data,
+        dataUser
       }
     }
 
@@ -46,6 +50,7 @@ export async function getServerSideProps(ctx) {
 }
 
 const Dashboard = (props) => {
+  console.log("data", props)
 
   return (
     <ApexChartWrapper>

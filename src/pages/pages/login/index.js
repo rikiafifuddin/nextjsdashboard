@@ -143,6 +143,9 @@ const LoginPage = () => {
     setStatus('success')
 
     Cookie.set('token', loginRes.token)
+    Cookie.set('role', loginRes.roles)
+    Cookie.set('name', loginRes.employeeIDs)
+
 
     Router.push('/')
   }
