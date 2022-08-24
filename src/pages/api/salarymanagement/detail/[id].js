@@ -54,14 +54,14 @@ export default async function handler(req, res) {
 
       res.status(200);
       res.json({
-          message: 'Get Detail Salary',
+          message: 'Get Detail Salary with join',
           data: salaryJoin
       });
     }catch (err){
         console.log(err)
         res.status(500);
         res.json({
-          message: 'Failed Get Detail Salary',
+          message: 'Failed Get Detail Salary with join',
           data: {}
         })
       }

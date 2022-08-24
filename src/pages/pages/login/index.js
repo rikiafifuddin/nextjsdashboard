@@ -146,8 +146,10 @@ const LoginPage = () => {
     Cookie.set('role', loginRes.roles)
     Cookie.set('name', loginRes.employeeIDs)
 
+    loginRes.roles === 'user' ? Router.push('/') : Router.push('/employee')
 
-    Router.push('/')
+
+
   }
 
   return (

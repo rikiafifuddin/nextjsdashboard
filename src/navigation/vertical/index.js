@@ -25,11 +25,6 @@ const navigation = () => {
   } else if (cookieRole == 'B46pvhd1ME1Tqxo'){
     return [
       {
-        title: 'Dashboard',
-        icon: HomeOutline,
-        path: '/'
-      },
-      {
         sectionTitle: 'Admin'
       },
       {

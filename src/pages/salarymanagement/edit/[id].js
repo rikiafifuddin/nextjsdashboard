@@ -31,7 +31,7 @@ import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 export async function getServerSideProps(ctx) {
 
   const { id } = ctx.query;
-  const postReq = await fetch(process.env.HOST_URL+'/api/salarymanagement/detail/'+id);
+  const postReq = await fetch(process.env.HOST_URL+'/api/salarymanagement/details/'+id);
 
   const detailSalary = await postReq.json();
 

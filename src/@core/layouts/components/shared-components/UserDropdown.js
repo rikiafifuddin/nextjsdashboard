@@ -56,6 +56,8 @@ const UserDropdown = () => {
     e.preventDefault()
 
     Cookie.remove('token')
+    Cookie.remove('name')
+    Cookie.remove('role')
 
     Router.push('/pages/login')
   }

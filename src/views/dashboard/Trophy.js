@@ -42,6 +42,7 @@ const Trophy = (props) => {
     const paramData = props.data
     const formatDatesalary = dayjs(paramData?.salaryDate).format('MMM-YYYY')
 
+
     // send a post request with the name to our API endpoint
     const fetchData = async () => {
       const dataPDF = await fetch('/api/generate-invoice', {
@@ -127,12 +128,14 @@ const Trophy = (props) => {
     invoice_nr: 1234
   };
 
+  const dateNow = dayjs(new Date()).format('MMMM-YYYY')
+
   return (
     <Card sx={{ position: 'relative' }}>
       <CardContent>
         <Typography variant='h6'>{data?.fullName}</Typography>
         <Typography variant='body2' sx={{ letterSpacing: '0.25px' }}>
-          Total gaji
+          Total gaji Bulan {dateNow}
         </Typography>
         <Typography variant='h5' sx={{ my: 4, color: 'primary.main' }}>
           {salaryFormat}
