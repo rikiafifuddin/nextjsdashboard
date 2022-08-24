@@ -16,7 +16,6 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
-import { Grid } from '@mui/material'
 
 const columns = [
   { id: 'fullName', label: 'Nama', minWidth: "20%" },
