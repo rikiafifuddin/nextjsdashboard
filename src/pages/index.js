@@ -1,6 +1,5 @@
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
-import { authPage } from '../../middlewares/authorizationPage';
 import cookies from 'next-cookies'
 import jwt from 'jsonwebtoken'
 
