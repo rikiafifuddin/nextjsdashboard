@@ -12,14 +12,6 @@ import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
 import CardActions from '@mui/material/CardActions'
 
-const CustomInput = forwardRef((props, ref) => {
-  return <TextField name='birthDate' fullWidth {...props} inputRef={ref} label='Tanggal lahir' autoComplete='off' />
-})
-
-const CustomInput2 = forwardRef((props, ref) => {
-  return <TextField name='joinDate' fullWidth {...props} inputRef={ref} label='Tanggal Masuk' autoComplete='off' />
-})
-
 const FormLayoutsSeparator = () => {
   // ** States
   const [language, setLanguage] = useState([])
@@ -57,11 +49,6 @@ const FormLayoutsSeparator = () => {
     keteranganPotongan: '',
     salaryDate: ''
   })
-
-  // Handle Password
-  const handlePasswordChange = prop => event => {
-    setValues({ ...values, [prop]: event.target.value })
-  }
 
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword })
