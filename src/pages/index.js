@@ -49,8 +49,6 @@ export async function getServerSideProps(ctx) {
 }
 
 const Dashboard = (props) => {
-  console.log("data", props)
-
   return (
     <ApexChartWrapper>
       <Grid container spacing={6}>

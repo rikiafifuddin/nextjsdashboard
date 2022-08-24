@@ -27,7 +27,7 @@ const columns = [
 ]
 
 
-const TableStickyHeader = (props) => {
+const TableStickyHeaderEmployeeList = (props) => {
   // ** States
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(25)
@@ -150,4 +150,4 @@ const TableStickyHeader = (props) => {
   )
 }
 
-export default TableStickyHeader
+export default TableStickyHeaderEmployeeList

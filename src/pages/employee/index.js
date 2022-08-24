@@ -1,15 +1,13 @@
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
-import Link from '@mui/material/Link'
 import Card from '@mui/material/Card'
-import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
 import Stack from '@mui/material/Stack';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { useRouter } from 'next/router'
 
 // ** Demo Components Imports
-import TableStickyHeader from 'src/pages/employee/EmployeeList'
+import TableStickyHeaderEmployeeList from 'src/pages/employee/employeeList'
 import { Button } from '@mui/material'
 
 export async function getServerSideProps(ctx) {
@@ -40,7 +38,7 @@ const MUITable = (props) => {
           </Stack>
 
 
-          <TableStickyHeader
+          <TableStickyHeaderEmployeeList
             ListEmployee ={props.ListEmployee}
           />
         </Card>

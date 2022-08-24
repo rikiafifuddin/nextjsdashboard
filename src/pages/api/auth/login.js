@@ -15,8 +15,6 @@ export default async function handler(req, res) {
 
   if (!checkPassword) return res.status(401).end()
 
-  console.log("checkuser", checkUser)
-
   const token = jwt.sign(
     {
       id: checkUser.id,
