@@ -6,6 +6,13 @@ export default async function handler(req, res) {
 
   const { employeeID, password } = req.body
 
+  const userExist = await db('users').where({employeeID}).first()
+  if (userExist) {
+    return res.status(405).json({
+      message: 'User '+ employeeID + ' Already Exist'
+    })
+  }
+
   const salt = bcrypt.genSaltSync(10)
   const passwordHash = bcrypt.hashSync(password, salt)
 

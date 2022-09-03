@@ -1,8 +1,11 @@
 // ** React Imports
-import { useState, Fragment } from 'react'
+import * as React from 'react';
+import { useState } from 'react'
 
 // ** Next Imports
 import Link from 'next/link'
+import Router from 'next/router'
+import cookies from 'next-cookies'
 
 // ** MUI Components
 import Box from '@mui/material/Box'
@@ -11,15 +14,13 @@ import Divider from '@mui/material/Divider'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import InputLabel from '@mui/material/InputLabel'
-import IconButton from '@mui/material/IconButton'
 import CardContent from '@mui/material/CardContent'
 import FormControl from '@mui/material/FormControl'
 import OutlinedInput from '@mui/material/OutlinedInput'
 import { styled, useTheme } from '@mui/material/styles'
 import MuiCard from '@mui/material/Card'
-import MuiFormControlLabel from '@mui/material/FormControlLabel'
-import Router from 'next/router'
-import cookies from 'next-cookies'
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
 
 // ** Configs
 import themeConfig from 'src/configs/themeConfig'
@@ -41,15 +42,6 @@ const LinkStyled = styled('a')(({ theme }) => ({
   color: theme.palette.primary.main
 }))
 
-const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
-  marginTop: theme.spacing(1.5),
-  marginBottom: theme.spacing(4),
-  '& .MuiFormControlLabel-label': {
-    fontSize: '0.875rem',
-    color: theme.palette.text.secondary
-  }
-}))
-
 // export async function getServerSideProps(ctx) {
 //   const allCookies = cookies(ctx)
 //   const status = allCookies.token !== undefined
@@ -68,33 +60,17 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
 
 const RegisterPage = () => {
   // ** States
-  const [values, setValues] = useState({
-    password: '',
-    showPassword: false
-  })
-
   const [fields, setFields] = useState({
     employeeID: '',
     password: ''
   })
 
-  const [status, setStatus] = useState('normal')
+  const [status, setStatus] = useState('')
+  const [messageSnack, setMessageSnack] = React.useState('');
+  const [open, setOpen] = React.useState(false);
 
   // ** Hook
   const theme = useTheme()
-
-  const handleChange = prop => event => {
-    setValues({ ...values, [prop]: event.target.value })
-  }
-
-  const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword })
-  }
-
-  const handleMouseDownPassword = event => {
-    event.preventDefault()
-  }
-
   async function registerHandler(e) {
     e.preventDefault()
     setStatus('loading')
@@ -107,14 +83,21 @@ const RegisterPage = () => {
       }
     })
 
-    if (!registerReq.ok) return setStatus('error ' + registerReq.status)
+    if (!registerReq.ok && registerReq.status === 401 || registerReq.status === 405) {
+      setStatus('error')
+      setMessageSnack('Username / Kode Pegawai Sudah terdaftar')
+
+      return setOpen(true)
+    }
 
     const registerRes = await registerReq.json()
 
     if (registerRes) {
-      Router.push('/pages/login')
+      setStatus('success')
+      setMessageSnack('Registrasi User Berhasil')
+      setOpen(true)
+      Router.reload(window.location.pathname);
     }
-    setStatus('success')
   }
 
   function fieldHandler(e) {
@@ -125,6 +108,18 @@ const RegisterPage = () => {
       [name]: e.target.value
     })
   }
+
+  const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   return (
     <Box className='content-center'>
@@ -146,7 +141,7 @@ const RegisterPage = () => {
           </Box>
           <Box sx={{ mb: 6 }}>
             <Typography align='center' variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
-              Register New Account🚀
+              Register New Account
             </Typography>
             <Typography align='center' variant='body2'>
               Make your app management easy and fun!
@@ -178,6 +173,7 @@ const RegisterPage = () => {
               type='submit'
               variant='contained'
               sx={{ marginTop: 7, marginBottom: 7 }}
+              disabled = {status === 'loading' ? true : false}
             >
               Sign up
             </Button>
@@ -195,6 +191,13 @@ const RegisterPage = () => {
           </form>
         </CardContent>
       </Card>
+
+      <Snackbar anchorOrigin={{vertical: 'top',horizontal: 'center'}} open={open} autoHideDuration={3000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity={status === 'success' ? 'success' : 'error'} sx={{ width: '100%' }}>
+          {messageSnack}
+        </Alert>
+      </Snackbar>
+
       <FooterIllustrationsV1 />
     </Box>
   )
