@@ -182,8 +182,8 @@ const RegisterPage = () => {
                 Already have an account?
               </Typography>
               <Typography variant='body2'>
-                <Link passHref href='/pages/login'>
-                  <LinkStyled>Sign in instead</LinkStyled>
+                <Link passHref href='/employee'>
+                  <LinkStyled>Back To Menu</LinkStyled>
                 </Link>
               </Typography>
             </Box>

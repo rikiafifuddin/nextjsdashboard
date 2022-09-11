@@ -40,6 +40,11 @@ const navigation = () => {
       {
         sectionTitle: '-'
       },
+      {
+        title: 'Register User ID',
+        icon: CreditCardOutline,
+        path: '/pages/register'
+      },
     ]
   }
 

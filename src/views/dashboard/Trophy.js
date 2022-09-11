@@ -33,15 +33,10 @@ const Trophy = (props) => {
   const data = props.data
   const formatDate = dayjs(data?.salaryDate).format('MMM-YYYY')
 
-  function formatCurrency(cents) {
-    return "$" + (cents / 100).toFixed(2);
-  }
-
   const generateInvoice = (props, e) => {
     e.preventDefault();
     const paramData = props.data
     const formatDatesalary = dayjs(paramData?.salaryDate).format('MMM-YYYY')
-
 
     // send a post request with the name to our API endpoint
     const fetchData = async () => {
@@ -99,36 +94,8 @@ const Trophy = (props) => {
 
   const salaryData = Number(data?.sumSalary).toFixed(2);
   const salaryFormat = `Rp ${new Intl.NumberFormat('id-ID').format(Number(salaryData))}`;
-
-  const invoice = {
-    shipping: {
-      name: "John Doe",
-      address: "1234 Main Street",
-      city: "San Francisco",
-      state: "CA",
-      country: "US",
-      postal_code: 94111
-    },
-    items: [
-      {
-        item: "TC 100",
-        description: "Toner Cartridge",
-        quantity: 2,
-        amount: 6000
-      },
-      {
-        item: "USB_EXT",
-        description: "USB Cable Extender",
-        quantity: 1,
-        amount: 2000
-      }
-    ],
-    subtotal: 8000,
-    paid: 0,
-    invoice_nr: 1234
-  };
-
-  const dateNow = dayjs(new Date()).format('MMMM-YYYY')
+  const monthValue = new Date().getMonth();
+  const dateNow = dayjs().month(monthValue-1).format('MMMM-YYYY')
 
   return (
     <Card sx={{ position: 'relative' }}>
@@ -141,7 +108,9 @@ const Trophy = (props) => {
           {salaryFormat}
         </Typography>
         <Stack spacing={2} direction="row">
-          <Button onClick={generateInvoice.bind(this, props)} size='small' variant='contained'>
+          <Button
+            disabled = {data ? false : true}
+            onClick={generateInvoice.bind(this, props)} size='small' variant='contained'>
             Download
           </Button>
         </Stack>
