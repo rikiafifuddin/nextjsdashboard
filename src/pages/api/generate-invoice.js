@@ -39,8 +39,6 @@ export default async (req, res) => {
     noRekening
   } = JSON.parse(req.body);
 
-  // const customerName = name || 'John Doe';
-
   try {
     // read our invoice-template.html file using node fs module
     const file = fs.readFileSync('./src/pages/api/invoice-template.html', 'utf8');
@@ -81,13 +79,15 @@ export default async (req, res) => {
     });
 
     // simulate a chrome browser with puppeteer and navigate to a new page
+    //uncomment for development
     // const browser = await puppeteer.launch();
+
+    //this uncomment for production
     const browser = await puppeteer.launch({
       executablePath: '/usr/bin/google-chrome',
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
     const page = await browser.newPage();
-
 
     // set our compiled html template as the pages content
     // then waitUntil the network is idle to make sure the content has been loaded

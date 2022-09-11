@@ -1,5 +1,6 @@
 // ** React Imports
-import { forwardRef, useState } from 'react'
+import * as React from 'react';
+import { useState } from 'react'
 import * as dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 
@@ -8,81 +9,22 @@ import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
-import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
 import CardHeader from '@mui/material/CardHeader'
-import InputLabel from '@mui/material/InputLabel'
-import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
 import CardActions from '@mui/material/CardActions'
-import FormControl from '@mui/material/FormControl'
-import OutlinedInput from '@mui/material/OutlinedInput'
-import InputAdornment from '@mui/material/InputAdornment'
-import Select from '@mui/material/Select'
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-
-// ** Third Party Imports
-import DatePicker from 'react-datepicker'
-
-// ** Icons Imports
-import EyeOutline from 'mdi-material-ui/EyeOutline'
-import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
-
-const CustomInput = forwardRef((props, ref) => {
-  return <TextField fullWidth {...props} inputRef={ref} label='Birth Date' autoComplete='off' />
-})
-
-const CustomInput2 = forwardRef((props, ref) => {
-  return <TextField fullWidth {...props} inputRef={ref} label='Join Date' autoComplete='off' />
-})
+import Snackbar from '@mui/material/Snackbar'
+import MuiAlert from '@mui/material/Alert';
 
 const FormLayoutsSeparator = (props) => {
   // ** States
   const Router = useRouter()
   dayjs().format()
   const data = props.detailEmployee
-  const [language, setLanguage] = useState([])
   const [status, setStatus] = useState("normal")
-  const [requestStatus, setRequestStatus] = useState(null)
-
-  const [values, setValues] = useState({
-    password: '',
-    password2: '',
-    showPassword: false,
-    showPassword2: false
-  })
-
-  // Handle Password
-  const handlePasswordChange = prop => event => {
-    setValues({ ...values, [prop]: event.target.value })
-  }
-
-  const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword })
-  }
-
-  const handleMouseDownPassword = event => {
-    event.preventDefault()
-  }
-
-  // Handle Confirm Password
-  const handleConfirmChange = prop => event => {
-    setValues({ ...values, [prop]: event.target.value })
-  }
-
-  const handleClickShowConfirmPassword = () => {
-    setValues({ ...values, showPassword2: !values.showPassword2 })
-  }
-
-  const handleMouseDownConfirmPassword = event => {
-    event.preventDefault()
-  }
-
-  // Handle Select
-  const handleSelectChange = event => {
-    setLanguage(event.target.value)
-  }
+  const [open, setOpen] = React.useState(false);
+  const [messageSnack, setMessageSnack] = React.useState('');
 
   const [paramHeader, setParamHeader] = useState({
     id: data?.id,
@@ -133,17 +75,33 @@ const FormLayoutsSeparator = (props) => {
       body: JSON.stringify(paramHeader)
     })
 
+    const res = await submitReq.json()
     if(submitReq.status === 200) {
       console.log("success Edit employee");
       setStatus('success')
-      setRequestStatus(true);
+      setMessageSnack('Berhasil Edit Pegawai')
+      setOpen(true)
       Router.push('/employee');
     } else {
       console.log("failed Edit employee");
-      setStatus('failed')
-      setRequestStatus(false);
+      setMessageSnack(`Gagal Edit ${res.message}`)
+      setStatus('error')
+      setOpen(true)
     }
   }
+
+  const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
+
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   return (
     <Card>
@@ -226,7 +184,7 @@ const FormLayoutsSeparator = (props) => {
                 InputLabelProps={{
                   shrink: true,
                 }}
-                fullWidth label='Tanggal Masuk' />
+                fullWidth label='Tanggal Lahir' />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -310,7 +268,9 @@ const FormLayoutsSeparator = (props) => {
         </CardContent>
         <Divider sx={{ margin: 0 }} />
         <CardActions>
-          <Button size='large' type='submit' sx={{ mr: 2 }} variant='contained'>
+          <Button
+            disabled= {status === 'loading' ? true : false}
+            size='large' type='submit' sx={{ mr: 2 }} variant='contained'>
             Simpan
           </Button>
           <Button size='large' color='secondary' variant='outlined' onClick={()=> Router.push('/employee')}>
@@ -318,6 +278,13 @@ const FormLayoutsSeparator = (props) => {
           </Button>
         </CardActions>
       </form>
+
+      <Snackbar anchorOrigin={{vertical: 'top',horizontal: 'center'}} open={open} autoHideDuration={3000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity={status === 'success' ? 'success' : 'error'} sx={{ width: '100%' }}>
+          {messageSnack}
+        </Alert>
+      </Snackbar>
+
     </Card>
   )
 }

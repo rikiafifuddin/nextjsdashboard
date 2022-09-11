@@ -1,4 +1,5 @@
 // ** React Imports
+import * as React from 'react';
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 
@@ -16,6 +17,8 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
+import Snackbar from '@mui/material/Snackbar'
+import MuiAlert from '@mui/material/Alert';
 
 const columns = [
   { id: 'fullName', label: 'Nama', minWidth: "20%" },
@@ -30,6 +33,9 @@ const TableStickyHeaderEmployeeList = (props) => {
   // ** States
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(25)
+  const [status, setStatus] = useState("normal")
+  const [open, setOpen] = React.useState(false);
+  const [messageSnack, setMessageSnack] = React.useState('');
   const Router = useRouter()
 
   const {
@@ -61,7 +67,7 @@ const TableStickyHeaderEmployeeList = (props) => {
   async function deleteHandler(employeeID, e) {
     e.preventDefault();
 
-    const ask = confirm('Apakah data ini akan dihapus?');
+    const ask = confirm(`Apakah data Pegawai ${employeeID} ?`);
 
     if(ask) {
       const deletePost = await fetch('/api/employee/delete/' + employeeID, {
@@ -69,12 +75,32 @@ const TableStickyHeaderEmployeeList = (props) => {
       });
 
       const res = await deletePost.json();
-
-      if( res ) {
+      if( deletePost.status === 200 ) {
+        console.log("success delete employee");
+        setStatus('success')
+        setMessageSnack(`Berhasil Hapus Pegawai`)
+        setOpen(true)
         Router.reload(window.location.pathname);
+      } else {
+        console.log("failed Delete employee");
+        setMessageSnack(`Gagal Hapus Pegawai`)
+        setStatus('error')
+        setOpen(true)
       }
     }
   }
+
+  const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -145,6 +171,12 @@ const TableStickyHeaderEmployeeList = (props) => {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
+
+      <Snackbar anchorOrigin={{vertical: 'top',horizontal: 'center'}} open={open} autoHideDuration={3000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity={status === 'success' ? 'success' : 'error'} sx={{ width: '100%' }}>
+          {messageSnack}
+        </Alert>
+      </Snackbar>
     </Paper>
   )
 }
