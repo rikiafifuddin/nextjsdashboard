@@ -33,6 +33,13 @@ export default async function handler(req, res) {
   } = req.body;
 
   try{
+    const employeeExist = await db('employee').where({employeeID}).first()
+    if (employeeExist) {
+      return res.status(405).json({
+        message: 'Employee '+ employeeID + ' Already Exist'
+      })
+    }
+
     const addEmployee = await db('employee').insert({
       fullName,
       email,
@@ -73,7 +80,7 @@ export default async function handler(req, res) {
     console.log(err)
     res.status(500);
     res.json({
-      message: 'Failed Add New Employee',
+      message: 'DB error',
       data: {}
     })
   }

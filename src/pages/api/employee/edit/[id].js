@@ -33,10 +33,17 @@ export default async function handler(req, res) {
       noteinsurance
      } = req.body;
 
-    const formatJoindate = dayjs(joinDate).format('YYYY-MM-DD')
-    const formatBirthDate = dayjs(birthDate).format('YYYY-MM-DD')
+    const formatJoindate =joinDate ? dayjs(joinDate).format('YYYY-MM-DD') : null
+    const formatBirthDate =birthDate ? dayjs(birthDate).format('YYYY-MM-DD') : null
 
     try{
+      const employeeExist = await db('employee').where({employeeID}).first()
+      if (employeeExist && employeeExist.id != id) {
+        return res.status(405).json({
+          message: 'Employee '+ employeeID + ' Already Exist'
+        })
+      }
+
       const editEmployee = await db('employee')
         .where({ id })
         .update({
