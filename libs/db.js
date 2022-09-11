@@ -1,12 +1,10 @@
 var knex = require('knex')({
-  client: "mysql",
+  client: process.env.DB_CLIENT,
   connection: {
-    // host: "34.101.166.97",
-
-    socketPath: "/cloudsql/triples-359711:asia-southeast2:triples",
-    user: "triples",
-    password: "asusx450C#",
-    database: 'fullstacknextjs'
+    socketPath: process.env.SOCKET_PATH,
+    user: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
   }
 })
 
