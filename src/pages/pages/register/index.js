@@ -126,6 +126,7 @@ const RegisterPage = () => {
       <Card sx={{ zIndex: 1 }}>
         <CardContent sx={{ padding: theme => `${theme.spacing(12, 9, 7)} !important` }}>
           <Box sx={{ mb: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <img src="https://cdn.discordapp.com/attachments/509662159177908267/1015623642589167636/LOGO2.png" />
             <Typography
               variant='h6'
               sx={{
@@ -136,7 +137,7 @@ const RegisterPage = () => {
                 fontSize: '1.5rem !important'
               }}
             >
-              {themeConfig.templateName}
+              {/* {themeConfig.templateName} */}
             </Typography>
           </Box>
           <Box sx={{ mb: 6 }}>
@@ -182,8 +183,8 @@ const RegisterPage = () => {
                 Already have an account?
               </Typography>
               <Typography variant='body2'>
-                <Link passHref href='/employee'>
-                  <LinkStyled>Back To Menu</LinkStyled>
+                <Link passHref href='/pages/login'>
+                  <LinkStyled>Sign in instead</LinkStyled>
                 </Link>
               </Typography>
             </Box>
