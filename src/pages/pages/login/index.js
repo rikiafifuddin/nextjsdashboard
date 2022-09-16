@@ -7,6 +7,7 @@ import { useRouter } from 'next/router'
 import Cookie from 'js-cookie'
 import Router from 'next/router'
 import cookies from 'next-cookies'
+import Link from 'next/link'
 
 // ** MUI Components
 import Box from '@mui/material/Box'
@@ -129,6 +130,12 @@ const LoginPage = () => {
     setOpen(false);
   };
 
+  const LinkStyled = styled('a')(({ theme }) => ({
+    fontSize: '0.875rem',
+    textDecoration: 'none',
+    color: theme.palette.primary.main
+  }))
+
   return (
     <Box className='content-center'>
       <Card sx={{ zIndex: 1 }}>
@@ -186,6 +193,16 @@ const LoginPage = () => {
             >
               Login
             </Button>
+            <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
+              <Typography variant='body2' sx={{ marginRight: 2 }}>
+                New on our platform?
+              </Typography>
+              <Typography variant='body2'>
+                <Link passHref href='/pages/register'>
+                  <LinkStyled>Create an account</LinkStyled>
+                </Link>
+              </Typography>
+            </Box>
             <Divider sx={{ my: 5 }}></Divider>
           </form>
         </CardContent>
