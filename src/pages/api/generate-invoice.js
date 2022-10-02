@@ -80,13 +80,13 @@ export default async (req, res) => {
 
     // simulate a chrome browser with puppeteer and navigate to a new page
     //uncomment for development
-    // const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch();
 
     //this uncomment for production
-    const browser = await puppeteer.launch({
-      executablePath: '/usr/bin/google-chrome',
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
-    });
+    // const browser = await puppeteer.launch({
+    //   executablePath: '/usr/bin/google-chrome',
+    //   args: ['--no-sandbox', '--disable-setuid-sandbox']
+    // });
     const page = await browser.newPage();
 
     // set our compiled html template as the pages content
