@@ -10,7 +10,7 @@ export default function authorization(req, res) {
 
     const [authType, authToken] = [authSplit[0], authSplit[1]]
 
-    if (authType !== 'Bearer') return res.status(401).end()
+    if (authType !== 'Bearer') return res.status(401).end() 
 
     return jwt.verify(authToken, process.env.JWT_SECRET, function (err, decoded) {
       if (err) return res.status(401).end()
